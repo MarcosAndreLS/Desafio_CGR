@@ -1,0 +1,11 @@
+# Virtual environment
+venv/
+
+# Arquivos compilados Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# SQLite database gerado localmente
+db.sqlite3
