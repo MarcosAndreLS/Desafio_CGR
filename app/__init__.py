@@ -11,4 +11,7 @@ def create_app():
     from .routes.equipamentos import equipamentos_bp
     app.register_blueprint(equipamentos_bp)
 
+    from .routes.recursos import recursos_bp
+    app.register_blueprint(recursos_bp)
+
     return app
