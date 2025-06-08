@@ -1,35 +1,23 @@
-from flask import Blueprint, jsonify, current_app, request
-from app.models.db import get_connection
+from flask import Blueprint, jsonify, request
+from app.repositories.equipamentos_repository import (
+    listar_todos_equipamentos,
+    buscar_equipamento_por_id,
+    atualizar_status_equipamento
+)
 
 equipamentos_bp = Blueprint('equipamentos', __name__)
 
 @equipamentos_bp.route('/equipamentos', methods=['GET'])
 def listar_equipamentos():
     try:
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM equipamentos")
-        rows = cursor.fetchall()
-
-        colunas = [desc[0] for desc in cursor.description]
-        equipamentos = [dict(zip(colunas, row)) for row in rows]
-
+        equipamentos = listar_todos_equipamentos()
         return jsonify(equipamentos)
     except Exception as e:
         return jsonify({'erro': str(e)}), 500
-    finally:
-        conn.close()
 
 @equipamentos_bp.route('/equipamentos/<int:equip_id>', methods=['GET'])
 def buscar_equipamento_por_idd(equip_id):
-    conn = get_connection(current_app.config['DB_PATH'])
-    cursor = conn.cursor()
-
-    cursor.execute('SELECT * FROM equipamentos WHERE id = ?', (equip_id,))
-    row = cursor.fetchone()
-
-    conn.close()
-
+    row = buscar_equipamento_por_id(equip_id)
     if row:
         equipamento = {
             'id': row[0],
@@ -51,30 +39,8 @@ def atualizar_status(equip_id):
     if not novo_status:
         return jsonify({"erro": "Campo 'status' é obrigatório."}), 400
 
-    conn = get_connection(current_app.config['DB_PATH'])
-    cursor = conn.cursor()
-
-    # Verifica se equipamento existe
-    cursor.execute('SELECT status FROM equipamentos WHERE id = ?', (equip_id,))
-    row = cursor.fetchone()
-
-    if not row:
-        conn.close()
+    status = atualizar_status_equipamento(equip_id, novo_status)
+    if status is None:
         return jsonify({"erro": "Equipamento não encontrado."}), 404
 
-    status_antigo = row[0]
-
-    # Atualiza status
-    cursor.execute('UPDATE equipamentos SET status = ? WHERE id = ?', (novo_status, equip_id))
-
-    # Insere log do evento
-    descricao = f"Status alterado de '{status_antigo}' para '{novo_status}'."
-    cursor.execute(
-        'INSERT INTO eventos (equipamento_id, tipo_evento, descricao) VALUES (?, ?, ?)',
-        (equip_id, 'Status Change', descricao)
-    )
-
-    conn.commit()
-    conn.close()
-
-    return jsonify({"mensagem": "Status atualizado com sucesso.", "novo_status": novo_status})
+    return jsonify({"mensagem": "Status atualizado com sucesso.", "novo_status": status})
