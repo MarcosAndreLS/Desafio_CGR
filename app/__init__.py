@@ -8,4 +8,13 @@ def create_app():
     from .routes.init import init_bp
     app.register_blueprint(init_bp)
 
+    from .routes.equipamentos import equipamentos_bp
+    app.register_blueprint(equipamentos_bp)
+
+    from .routes.recursos import recursos_bp
+    app.register_blueprint(recursos_bp)
+
+    from .routes.eventos import eventos_bp
+    app.register_blueprint(eventos_bp)
+
     return app

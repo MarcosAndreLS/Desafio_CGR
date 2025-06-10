@@ -10,16 +10,17 @@ def get_connection(db_path=None):
 def init_db(db_path, schema_path, data_path):
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
 
-    if os.path.exists(db_path):
-        os.remove(db_path)
+    if not os.path.exists(db_path):
+        conn = get_connection(db_path)
 
-    conn = get_connection(db_path)
+        with open(schema_path, 'r', encoding='utf-8') as f:
+            conn.executescript(f.read())
 
-    with open(schema_path, 'r', encoding='utf-8') as f:
-        conn.executescript(f.read())
+        with open(data_path, 'r', encoding='utf-8') as f:
+            conn.executescript(f.read())
 
-    with open(data_path, 'r', encoding='utf-8') as f:
-        conn.executescript(f.read())
-
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
+        return "Banco criado e populado com sucesso!"
+    else:
+        return "Banco já existe. Nenhuma ação realizada."
