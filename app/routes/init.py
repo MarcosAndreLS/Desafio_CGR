@@ -10,7 +10,7 @@ def initialize_database():
     data_path = 'database/data.sql'
 
     try:
-        init_db(db_path, schema_path, data_path)
-        return 'Banco de dados SQLite criado e populado com sucesso!'
+        mensagem = init_db(db_path, schema_path, data_path)
+        return mensagem
     except Exception as e:
         return f'Erro ao criar banco: {e}', 500

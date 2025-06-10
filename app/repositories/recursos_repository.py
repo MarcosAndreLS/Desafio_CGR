@@ -41,7 +41,7 @@ def alocar_recurso(equipamento_id, tipo_recurso, cliente_associado=None):
     """, (cliente_associado, recurso_id))
 
     # Insere log do evento
-    descricao = f"Recurso ID {recurso_id} alocado ao cliente '{cliente_associado}'." if cliente_associado else f"Recurso ID {recurso_id} alocado."
+    descricao = f"Recurso {recurso_id} alocado ao cliente '{cliente_associado}'." if cliente_associado else f"Recurso ID {recurso_id} alocado."
     cursor.execute("""
         INSERT INTO eventos (equipamento_id, tipo_evento, descricao)
         VALUES (?, 'Resource Allocated', ?)
@@ -81,7 +81,7 @@ def desalocar_recurso(recurso_id):
     """, (recurso_id,))
 
     # Registra evento
-    descricao = f"Recurso ID {recurso_id} desalocado com sucesso."
+    descricao = f"Recurso {recurso_id} desalocado com sucesso."
     cursor.execute("""
         INSERT INTO eventos (equipamento_id, tipo_evento, descricao)
         VALUES (?, 'Resource Deallocated', ?)
