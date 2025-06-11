@@ -1,5 +1,6 @@
 from app.models.db import get_connection
 from flask import current_app
+from app.repositories.eventos_repository import registrar_evento
 
 def listar_recursos_por_equipamento(equip_id):
     conn = get_connection(current_app.config['DB_PATH'])
@@ -36,16 +37,15 @@ def alocar_recurso(equipamento_id, tipo_recurso, cliente_associado=None):
     # Atualiza o status do recurso para 'Alocado'
     cursor.execute("""
         UPDATE recursos
-        SET status_alocacao = 'Alocado', cliente_associado = ?
+        SET status_alocacao = 'Alocado',
+            cliente_associado = ?,
+            status_atualizado_em = datetime('now')
         WHERE id = ?
     """, (cliente_associado, recurso_id))
 
     # Insere log do evento
-    descricao = f"Recurso {recurso_id} alocado ao cliente '{cliente_associado}'." if cliente_associado else f"Recurso ID {recurso_id} alocado."
-    cursor.execute("""
-        INSERT INTO eventos (equipamento_id, tipo_evento, descricao)
-        VALUES (?, 'Resource Allocated', ?)
-    """, (equipamento_id, descricao))
+    descricao = f"Recurso {recurso_id} alocado ao cliente {cliente_associado}." if cliente_associado else f"Recurso ID {recurso_id} alocado."
+    registrar_evento(conn, equipamento_id, 'Resource Allocated', descricao)
 
     conn.commit()
     conn.close()
@@ -76,16 +76,15 @@ def desalocar_recurso(recurso_id):
     # Atualiza status e limpa cliente
     cursor.execute("""
         UPDATE recursos
-        SET status_alocacao = 'Disponível', cliente_associado = NULL
+        SET status_alocacao = 'Disponível',
+            cliente_associado = NULL,
+            status_atualizado_em = datetime('now')
         WHERE id = ?
     """, (recurso_id,))
 
     # Registra evento
     descricao = f"Recurso {recurso_id} desalocado com sucesso."
-    cursor.execute("""
-        INSERT INTO eventos (equipamento_id, tipo_evento, descricao)
-        VALUES (?, 'Resource Deallocated', ?)
-    """, (equipamento_id, descricao))
+    registrar_evento(conn, equipamento_id, 'Resource Deallocated', descricao)
 
     conn.commit()
     conn.close()

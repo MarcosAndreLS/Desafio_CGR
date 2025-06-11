@@ -1,5 +1,6 @@
 from flask import Flask
 import os
+from app.models.db import init_db
 
 def create_app():
     app = Flask(__name__)
@@ -16,5 +17,13 @@ def create_app():
 
     from .routes.eventos import eventos_bp
     app.register_blueprint(eventos_bp)
+
+    # Inicializa banco ao iniciar app
+    schema_path = os.path.join(os.getcwd(), 'database', 'schema.sql')
+    data_path = os.path.join(os.getcwd(), 'database', 'data.sql')
+    try:
+        init_db(app.config['DB_PATH'], schema_path, data_path)
+    except Exception as e:
+        print(f"Erro ao inicializar banco de dados: {e}")
 
     return app

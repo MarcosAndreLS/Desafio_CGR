@@ -31,7 +31,7 @@ def atualizar_status_equipamento(equip_id, novo_status):
 
     status_antigo = row[0]
     cursor.execute("UPDATE equipamentos SET status = ? WHERE id = ?", (novo_status, equip_id))
-    descricao = f"Status alterado de '{status_antigo}' para '{novo_status}'."
+    descricao = f"Status alterado de {status_antigo} para {novo_status}."
     cursor.execute(
         "INSERT INTO eventos (equipamento_id, tipo_evento, descricao) VALUES (?, ?, ?)",
         (equip_id, "Status Change", descricao)

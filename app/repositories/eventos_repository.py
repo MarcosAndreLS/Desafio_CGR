@@ -1,6 +1,7 @@
 from app.models.db import get_connection
 from flask import current_app
 
+
 def listar_todos_logs():
     conn = get_connection(current_app.config['DB_PATH'])
     cursor = conn.cursor()
@@ -15,3 +16,11 @@ def listar_todos_logs():
     logs = [dict(zip(colunas, row)) for row in rows]
     conn.close()
     return logs
+
+
+def registrar_evento(conn, equipamento_id, tipo_evento, descricao):
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO eventos (equipamento_id, tipo_evento, descricao)
+        VALUES (?, ?, ?)
+    """, (equipamento_id, tipo_evento, descricao))
