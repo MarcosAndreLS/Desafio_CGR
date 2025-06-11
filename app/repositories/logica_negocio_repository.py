@@ -36,18 +36,23 @@ def verificar_gargalos(equipamento_id, limite_eventos=3, intervalo_minutos=10):
     cursor = conn.cursor()
 
     # Define o timestamp do limite inferior
-    tempo_limite = (datetime.now(timezone.utc) - timedelta(minutes=10)).isoformat()
+    utc_minus_3 = timezone(timedelta(hours=-3))
 
-    # Filtra eventos com tipo "Status Changed" e descrição com "Offline"
+    tempo_limite = (datetime.now(utc_minus_3) - timedelta(minutes=intervalo_minutos)).strftime("%Y-%m-%d %H:%M:%S")
+
+    print(tempo_limite)
+
+    # Filtra eventos com tipo "Status Change" e descrição com "Offline"
     cursor.execute("""
         SELECT COUNT(*) FROM eventos
         WHERE equipamento_id = ?
-        AND tipo_evento = 'Status Changed'
-        AND descricao LIKE '%para ''Offline''%'
+        AND tipo_evento = 'Status Change'
+        AND descricao LIKE '%para Offline%'
         AND timestamp >= ?
     """, (equipamento_id, tempo_limite))
 
     quantidade = cursor.fetchone()[0]
+    print(quantidade)
     conn.close()
 
     if quantidade >= limite_eventos:

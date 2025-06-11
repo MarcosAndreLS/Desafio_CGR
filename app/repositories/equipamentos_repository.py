@@ -45,4 +45,9 @@ def atualizar_status_equipamento(equip_id, novo_status):
     )
     conn.commit()
     conn.close()
-    return novo_status
+    return {
+        "status_alterado": True,
+        "mensagem": "Status atualizado com sucesso.",
+        "status_anterior": status_antigo,
+        "status_novo": novo_status
+    }
