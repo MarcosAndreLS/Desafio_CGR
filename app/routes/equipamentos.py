@@ -39,8 +39,17 @@ def atualizar_status(equip_id):
     if not novo_status:
         return jsonify({"erro": "Campo 'status' é obrigatório."}), 400
 
-    status = atualizar_status_equipamento(equip_id, novo_status)
-    if status is None:
+    resultado = atualizar_status_equipamento(equip_id, novo_status)
+
+    if resultado is None:
         return jsonify({"erro": "Equipamento não encontrado."}), 404
 
-    return jsonify({"mensagem": "Status atualizado com sucesso.", "novo_status": status})
+    # Se o status não foi alterado
+    if "status_novo" not in resultado:
+        return jsonify(resultado), 200
+
+    return jsonify({
+        "mensagem": resultado["mensagem"],
+        "status_anterior": resultado["status_anterior"],
+        "novo_status": resultado["status_novo"]
+    }), 200

@@ -30,6 +30,13 @@ def atualizar_status_equipamento(equip_id, novo_status):
         return None
 
     status_antigo = row[0]
+    # Se o status já for o mesmo, não faz nada
+    if status_antigo == novo_status:
+        conn.close()
+        return {
+            "mensagem": f"O status já está como '{novo_status}'. Nenhuma alteração foi feita."
+        }
+
     cursor.execute("UPDATE equipamentos SET status = ? WHERE id = ?", (novo_status, equip_id))
     descricao = f"Status alterado de {status_antigo} para {novo_status}."
     cursor.execute(
@@ -38,4 +45,9 @@ def atualizar_status_equipamento(equip_id, novo_status):
     )
     conn.commit()
     conn.close()
-    return novo_status
+    return {
+        "status_alterado": True,
+        "mensagem": "Status atualizado com sucesso.",
+        "status_anterior": status_antigo,
+        "status_novo": novo_status
+    }

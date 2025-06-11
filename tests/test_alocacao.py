@@ -5,5 +5,5 @@ from app.repositories.logica_negocio_repository import get_melhor_recurso_dispon
 app = create_app()
 
 with app.app_context():
-    resultado = get_melhor_recurso_disponivel("Porta Ethernet", 1)
+    resultado = get_melhor_recurso_disponivel("Porta Ethernet")
     print(resultado)
