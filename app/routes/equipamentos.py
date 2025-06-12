@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from app.repositories.simulacao_falha_repository import simular_falha_equipamento
 from app.repositories.equipamentos_repository import (
     listar_todos_equipamentos,
     buscar_equipamento_por_id,
@@ -52,4 +53,16 @@ def atualizar_status(equip_id):
         "mensagem": resultado["mensagem"],
         "status_anterior": resultado["status_anterior"],
         "novo_status": resultado["status_novo"]
+    }), 200
+
+@equipamentos_bp.route('/equipamentos/<int:equip_id>/simular_falha', methods=['POST'])
+def simular_falha(equip_id):
+    resultado = simular_falha_equipamento(equip_id)
+    
+    if "erro" in resultado:
+        return jsonify(resultado), 404
+
+    return jsonify({
+        "mensagem": "Simulação de falha concluída com sucesso.",
+        "dados": resultado
     }), 200

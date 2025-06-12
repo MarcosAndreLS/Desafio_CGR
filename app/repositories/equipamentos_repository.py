@@ -1,5 +1,6 @@
 from app.models.db import get_connection
 from flask import current_app
+from app.repositories.eventos_repository import registrar_evento
 
 def listar_todos_equipamentos():
     conn = get_connection(current_app.config['DB_PATH'])
@@ -39,10 +40,8 @@ def atualizar_status_equipamento(equip_id, novo_status):
 
     cursor.execute("UPDATE equipamentos SET status = ? WHERE id = ?", (novo_status, equip_id))
     descricao = f"Status alterado de {status_antigo} para {novo_status}."
-    cursor.execute(
-        "INSERT INTO eventos (equipamento_id, tipo_evento, descricao) VALUES (?, ?, ?)",
-        (equip_id, "Status Change", descricao)
-    )
+    registrar_evento(conn, equip_id, "Status Change", descricao)
+
     conn.commit()
     conn.close()
     return {
