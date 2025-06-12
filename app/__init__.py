@@ -1,10 +1,13 @@
 from flask import Flask
 import os
 from app.models.db import init_db
+from flasgger import Swagger
 
 def create_app():
     app = Flask(__name__)
     app.config['DB_PATH'] = os.path.join(os.getcwd(), 'database', 'db.sqlite3')
+
+    swagger = Swagger(app)
 
     from .routes.init import init_bp
     app.register_blueprint(init_bp)

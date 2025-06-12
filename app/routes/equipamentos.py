@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flasgger import swag_from
 from app.repositories.simulacao_falha_repository import simular_falha_equipamento
 from app.repositories.equipamentos_repository import (
     listar_todos_equipamentos,
@@ -9,6 +10,7 @@ from app.repositories.equipamentos_repository import (
 equipamentos_bp = Blueprint('equipamentos', __name__)
 
 @equipamentos_bp.route('/equipamentos', methods=['GET'])
+@swag_from('../../docs/equipamentos/listar_equipamentos.yml')
 def listar_equipamentos():
     try:
         equipamentos = listar_todos_equipamentos()
@@ -17,6 +19,7 @@ def listar_equipamentos():
         return jsonify({'erro': str(e)}), 500
 
 @equipamentos_bp.route('/equipamentos/<int:equip_id>', methods=['GET'])
+@swag_from('../../docs/equipamentos/equipamento_por_id.yml')
 def buscar_equipamento_por_idd(equip_id):
     row = buscar_equipamento_por_id(equip_id)
     if row:

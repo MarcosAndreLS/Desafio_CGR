@@ -1,0 +1,40 @@
+tags:
+  - Equipamentos
+summary: Buscar equipamento por ID
+operationId: buscar_equipamento_por_id
+parameters:
+  - name: equip_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: ID do equipamento a ser buscado
+responses:
+  200:
+    description: Equipamento encontrado
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              type: integer
+            nome:
+              type: string
+            tipo:
+              type: string
+            ip_gerenciamento:
+              type: string
+            status:
+              type: string
+            localizacao:
+              type: string
+  404:
+    description: Equipamento não encontrado
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            erro:
+              type: string
