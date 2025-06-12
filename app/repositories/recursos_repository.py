@@ -1,6 +1,6 @@
 from app.models.db import get_connection
 from flask import current_app
-from app.repositories.eventos_repository import registrar_evento
+
 
 def listar_recursos_por_equipamento(equip_id):
     conn = get_connection(current_app.config['DB_PATH'])
@@ -16,77 +16,37 @@ def listar_recursos_por_equipamento(equip_id):
     conn.close()
     return recursos
 
-def alocar_recurso(equipamento_id, tipo_recurso, cliente_associado=None):
+def buscar_recurso_disponivel(equipamento_id, tipo_recurso):
     conn = get_connection(current_app.config['DB_PATH'])
     cursor = conn.cursor()
-
-    # Busca um recurso disponível
     cursor.execute("""
         SELECT id FROM recursos
         WHERE equipamento_id = ? AND tipo_recurso = ? AND status_alocacao = 'Disponível'
         LIMIT 1
     """, (equipamento_id, tipo_recurso))
-    row = cursor.fetchone()
+    recurso = cursor.fetchone()
+    conn.close()
+    return recurso
 
-    if not row:
-        conn.close()
-        return None, "Nenhum recurso disponível encontrado."
-
-    recurso_id = row[0]
-
-    # Atualiza o status do recurso para 'Alocado'
+def atualizar_status_recurso(recurso_id, novo_status, cliente_associado=None):
+    conn = get_connection(current_app.config['DB_PATH'])
+    cursor = conn.cursor()
+    
     cursor.execute("""
         UPDATE recursos
-        SET status_alocacao = 'Alocado',
+        SET status_alocacao = ?,
             cliente_associado = ?,
             status_atualizado_em = datetime('now')
         WHERE id = ?
-    """, (cliente_associado, recurso_id))
-
-    # Insere log do evento
-    descricao = f"Recurso {recurso_id} alocado ao cliente {cliente_associado}." if cliente_associado else f"Recurso ID {recurso_id} alocado."
-    registrar_evento(conn, equipamento_id, 'Resource Allocated', descricao)
-
+    """, (novo_status, cliente_associado, recurso_id))
+    
     conn.commit()
     conn.close()
 
-    return recurso_id, None
-
-def desalocar_recurso(recurso_id):
+def buscar_status_recurso(recurso_id):
     conn = get_connection(current_app.config['DB_PATH'])
     cursor = conn.cursor()
-
-    # Verifica se o recurso existe e está alocado
-    cursor.execute(
-        "SELECT equipamento_id, status_alocacao FROM recursos WHERE id = ?",
-        (recurso_id,)
-    )
+    cursor.execute("SELECT equipamento_id, status_alocacao FROM recursos WHERE id = ?", (recurso_id,))
     row = cursor.fetchone()
-
-    if not row:
-        conn.close()
-        return {"erro": "Recurso não encontrado."}, 404
-
-    equipamento_id, status_atual = row
-
-    if status_atual != "Alocado":
-        conn.close()
-        return {"erro": "Recurso não está alocado."}, 400
-
-    # Atualiza status e limpa cliente
-    cursor.execute("""
-        UPDATE recursos
-        SET status_alocacao = 'Disponível',
-            cliente_associado = NULL,
-            status_atualizado_em = datetime('now')
-        WHERE id = ?
-    """, (recurso_id,))
-
-    # Registra evento
-    descricao = f"Recurso {recurso_id} desalocado com sucesso."
-    registrar_evento(conn, equipamento_id, 'Resource Deallocated', descricao)
-
-    conn.commit()
     conn.close()
-
-    return {"mensagem": "Recurso desalocado com sucesso."}, 200
+    return row

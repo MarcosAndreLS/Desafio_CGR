@@ -1,8 +1,6 @@
 from app.models.db import get_connection
-from datetime import datetime, timedelta, timezone
 
-
-def get_melhor_recurso_disponivel(tipo_recurso, equipamento_id=None):
+def buscar_melhor_recurso_disponivel(tipo_recurso, equipamento_id=None):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -30,19 +28,10 @@ def get_melhor_recurso_disponivel(tipo_recurso, equipamento_id=None):
     conn.close()
     return recurso
 
-
-def verificar_gargalos(equipamento_id, limite_eventos=3, intervalo_minutos=10):
+def contar_eventos_offline(equipamento_id, tempo_limite):
     conn = get_connection()
     cursor = conn.cursor()
 
-    # Define o timestamp do limite inferior
-    utc_minus_3 = timezone(timedelta(hours=-3))
-
-    tempo_limite = (datetime.now(utc_minus_3) - timedelta(minutes=intervalo_minutos)).strftime("%Y-%m-%d %H:%M:%S")
-
-    print(tempo_limite)
-
-    # Filtra eventos com tipo "Status Change" e descrição com "Offline"
     cursor.execute("""
         SELECT COUNT(*) FROM eventos
         WHERE equipamento_id = ?
@@ -52,19 +41,5 @@ def verificar_gargalos(equipamento_id, limite_eventos=3, intervalo_minutos=10):
     """, (equipamento_id, tempo_limite))
 
     quantidade = cursor.fetchone()[0]
-    print(quantidade)
     conn.close()
-
-    if quantidade >= limite_eventos:
-        return {
-            "equipamento_id": equipamento_id,
-            "problema_detectado": True,
-            "mensagem": f"{quantidade} eventos de status 'Offline' nos últimos {intervalo_minutos} minutos."
-        }
-    else:
-        return {
-            "equipamento_id": equipamento_id,
-            "problema_detectado": False,
-            "mensagem": "Nenhum gargalo identificado."
-        }
-
+    return quantidade

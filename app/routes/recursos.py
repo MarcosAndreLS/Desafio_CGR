@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
-from app.repositories.recursos_repository import (
-    listar_recursos_por_equipamento, 
+from app.services.recursos_service import (
+    obter_recursos_do_equipamento,
     alocar_recurso,
     desalocar_recurso
 )
@@ -9,7 +9,7 @@ recursos_bp = Blueprint('recursos', __name__)
 
 @recursos_bp.route('/equipamentos/<int:equip_id>/recursos', methods=['GET'])
 def listar_recursos_do_equipamento(equip_id):
-    recursos = listar_recursos_por_equipamento(equip_id)
+    recursos = obter_recursos_do_equipamento(equip_id)
     if not recursos:
         return jsonify({'mensagem': 'Nenhum recurso encontrado para este equipamento.'}), 404
     return jsonify(recursos)
