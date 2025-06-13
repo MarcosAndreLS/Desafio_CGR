@@ -1,0 +1,37 @@
+tags:
+  - Eventos
+summary: Lista todos os eventos registrados
+operationId: listar_Eventos
+description: Retorna uma lista de eventos registrados no sistema, incluindo data, tipo, descrição e equipamento relacionado.
+responses:
+  200:
+    description: Lista de eventos
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              equipamento_id:
+                type: integer
+              tipo_evento:
+                type: string
+                example: "Status"
+              descricao:
+                type: string
+              data_hora:
+                type: string
+                format: date-time
+  500:
+    description: Erro interno ao listar eventos
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            erro:
+              type: string
+              example: Erro ao listar eventos. mensagem detalhada

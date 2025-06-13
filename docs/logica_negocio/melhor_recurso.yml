@@ -1,0 +1,45 @@
+tags:
+  - Lógica de negócio
+summary: Obter melhor recurso disponível
+operationId: obter_Melhor_Recurso
+description: Retorna o recurso mais disponível e adequado com base no tipo do recurso e, opcionalmente, no equipamento.
+parameters:
+  - name: tipo_recurso
+    in: query
+    required: true
+    description: Tipo do recurso (ex. 'Porta Ethernet').
+    schema:
+      type: string
+  - name: equipamento_id
+    in: query
+    required: false
+    description: ID do equipamento para o qual o recurso será alocado (opcional).
+    schema:
+      type: integer
+responses:
+  200:
+    description: Recurso encontrado com sucesso.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              type: integer
+            nome:
+              type: string
+            tipo_recurso:
+              type: string
+            equipamento_id:
+              type: integer
+            status_alocacao:
+              type: string
+            status_atualizado_em:
+              type: string
+              format: date-time
+  400:
+    description: Erro de parâmetro obrigatório ou mal formatado.
+  404:
+    description: Nenhum recurso disponível encontrado.
+  500:
+    description: Erro interno ao processar a requisição.

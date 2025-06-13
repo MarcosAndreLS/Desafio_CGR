@@ -25,9 +25,9 @@ def verificar_gargalos(equipamento_id, limite_eventos=3, intervalo_minutos=10):
     
 def obter_melhor_recurso(tipo_recurso, equipamento_id=None):
     recurso = buscar_melhor_recurso_disponivel(tipo_recurso, equipamento_id)
-
+    print(recurso)
     if recurso:
-        colunas = ['id', 'nome', 'tipo_recurso', 'equipamento_id', 'status_alocacao', 'status_atualizado_em']
+        colunas = ['id', 'equipamento_id', 'tipo_recurso', 'valor_recurso', 'status_alocacao', 'cliente_associado',  'status_atualizado_em']
         return dict(zip(colunas, recurso))
     else:
         return None

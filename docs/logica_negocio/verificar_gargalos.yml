@@ -1,0 +1,28 @@
+tags:
+  - Lógica de negócio
+summary: Verificar gargalos do equipamento
+operationId: verificar_Gargalos_Equipamento
+description: Verifica se o equipamento teve eventos "Offline" nos últimos 10 minutos.
+parameters:
+  - name: equip_id
+    in: path
+    required: true
+    description: ID do equipamento a ser verificado.
+    schema:
+      type: integer
+responses:
+  200:
+    description: Resultado da verificação de gargalos.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            equipamento_id:
+              type: integer
+            problema_detectado:
+              type: boolean
+            mensagem:
+              type: string
+  500:
+    description: Erro interno ao processar a requisição.

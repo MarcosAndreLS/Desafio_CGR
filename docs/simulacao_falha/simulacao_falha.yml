@@ -1,0 +1,55 @@
+tags:
+  - simulação de falha
+summary: Simular falha em recursos de um equipamento
+operationId: simular_Falha_Equipamento
+description: Simula falhas aleatórias em um ou mais recursos vinculados ao equipamento, alterando seus status e registrando eventos de falha simulada. Gera logs
+parameters:
+  - name: equip_id
+    in: path
+    required: true
+    description: ID do equipamento alvo da simulação.
+    schema:
+      type: integer
+responses:
+  200:
+    description: Simulação realizada com sucesso.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            mensagem:
+              type: string
+            dados:
+              type: object
+              properties:
+                equipamento_id:
+                  type: integer
+                recursos_afetados:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      recurso_id:
+                        type: integer
+                      status_simulado:
+                        type: string
+                        enum: ["Com Problema", "Indisponível"]
+  404:
+    description: Nenhum recurso encontrado para o equipamento.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            erro:
+              type: string
+  500:
+    description: Erro interno ao processar a simulação.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            erro:
+              type: string

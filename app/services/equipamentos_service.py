@@ -23,23 +23,28 @@ def obter_equipamento_por_id(equip_id):
     return None
 
 def processar_atualizacao_status(equip_id, novo_status):
-    status_atual = obter_status_equipamento(equip_id)
+    try:
+        status_atual = obter_status_equipamento(equip_id)
 
-    if status_atual is None:
-        return None
+        if status_atual is None:
+            return None
 
-    if status_atual == novo_status:
+        if status_atual == novo_status:
+            return {
+                "mensagem": f"O status já está como '{novo_status}'. Nenhuma alteração foi feita."
+            }
+
+        atualizar_status_equipamento_no_banco(equip_id, novo_status)
+        descricao = f"Status alterado de {status_atual} para {novo_status}."
+        registrar_evento(equip_id, "Status Change", descricao)
+
         return {
-            "mensagem": f"O status já está como '{novo_status}'. Nenhuma alteração foi feita."
+            "status_alterado": True,
+            "mensagem": "Status atualizado com sucesso.",
+            "status_anterior": status_atual,
+            "status_novo": novo_status
         }
-
-    atualizar_status_equipamento_no_banco(equip_id, novo_status)
-    descricao = f"Status alterado de {status_atual} para {novo_status}."
-    registrar_evento(equip_id, "Status Change", descricao)
-
-    return {
-        "status_alterado": True,
-        "mensagem": "Status atualizado com sucesso.",
-        "status_anterior": status_atual,
-        "status_novo": novo_status
-    }
+    except Exception as e:
+        return {
+            "erro": f"Erro ao processar atualização de status: {str(e)}"
+        }

@@ -2,6 +2,7 @@ tags:
   - Equipamentos
 summary: Lista todos os equipamentos
 operationId: listar_equipamentos
+description: Retorna todos os equipamentos de rede cadastrados.
 responses:
   200:
     description: Lista de equipamentos retornada com sucesso
@@ -33,3 +34,4 @@ responses:
           properties:
             erro:
               type: string
+              example: Erro ao listar equipamentos. detalhes do erro

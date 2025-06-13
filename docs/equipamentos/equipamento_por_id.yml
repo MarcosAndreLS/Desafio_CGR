@@ -1,7 +1,8 @@
 tags:
   - Equipamentos
-summary: Buscar equipamento por ID
 operationId: buscar_equipamento_por_id
+summary: Buscar equipamento por ID
+description: Retorna os detalhes de um equipamento específico.
 parameters:
   - name: equip_id
     in: path
@@ -38,3 +39,14 @@ responses:
           properties:
             erro:
               type: string
+              example: Equipamento não encontrado.
+  500:
+    description: Erro interno do servidor
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            erro:
+              type: string
+              example: Erro ao buscar equipament. detalhes do erro

@@ -1,0 +1,54 @@
+tags:
+  - Recursos
+summary: Lista recursos de um equipamento
+operationId: listarRecursosDoEquipamento
+description: Retorna todos os recursos associados a um equipamento específico, incluindo tipo, valor e status de alocação.
+parameters:
+  - name: equip_id
+    in: path
+    required: true
+    description: ID do equipamento
+    schema:
+      type: integer
+responses:
+  200:
+    description: Lista de recursos associados ao equipamento
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              tipo_recurso:
+                type: string
+              valor_recurso:
+                type: string
+              status_alocacao:
+                type: string
+              cliente_associado:
+                type: string
+                nullable: true
+
+  404:
+    description: Nenhum recurso encontrado para este equipamento
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            mensagem:
+              type: string
+              example: Nenhum recurso encontrado para este equipamento.
+  500:
+    description: Erro interno do servidor
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            erro:
+              type: string
+              example: Erro interno no servidor. Tente novamente mais tarde.

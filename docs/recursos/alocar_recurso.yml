@@ -1,0 +1,57 @@
+tags:
+  - Recursos
+summary: Alocar um recurso disponível para um cliente
+operationId: alocar_Recurso
+description: >
+  Aloca um recurso disponível de um determinado tipo para um equipamento específico,
+  podendo associar o recurso a um cliente.
+parameters:
+  - in: body
+    name: body
+    required: true
+    description: Dados para alocação de recurso
+    schema:
+      type: object
+      required:
+        - equipamento_id
+        - tipo_recurso
+      properties:
+        equipamento_id:
+          type: integer
+          description: ID do equipamento para o qual o recurso será alocado
+        tipo_recurso:
+          type: string
+          description: Tipo do recurso a ser alocado
+        cliente_associado:
+          type: string
+          description: Nome do cliente associado ao recurso (opcional)
+          nullable: true
+
+responses:
+  200:
+    description: Recurso alocado com sucesso
+    schema:
+      type: object
+      properties:
+        recurso_id:
+          type: integer
+          example: 12
+        mensagem:
+          type: string
+          example: Recurso alocado com sucesso.
+  404:
+    description: Nenhum recurso disponível encontrado
+    schema:
+      type: object
+      properties:
+        erro:
+          type: string
+          example: Nenhum recurso disponível encontrado.
+  500:
+    description: Erro interno ao alocar recurso
+    schema:
+      type: object
+      properties:
+        erro:
+          type: string
+          example: Erro ao alocar recurso. mensagem de erro detalhada

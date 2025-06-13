@@ -13,10 +13,12 @@ def simular_falha_equipamento(equipamento_id):
     print(recursos_ids)
 
     recursos_selecionados = random.sample(recursos_ids, min(len(recursos_ids), random.randint(1, len(recursos_ids))))
+
+    status_possiveis = ["Com Problema", "Indisponível"]
     logs = []
 
     for recurso_id in recursos_selecionados:
-        novo_status = "Com Problema"
+        novo_status = random.choice(status_possiveis)
         atualizar_status_recurso(recurso_id, novo_status)
 
         descricao = f"Simulação de falha: status alterado para {novo_status}."

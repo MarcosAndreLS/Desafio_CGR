@@ -20,31 +20,41 @@ def listar_equipamentos():
 @equipamentos_bp.route('/equipamentos/<int:equip_id>', methods=['GET'])
 @swag_from('../../docs/equipamentos/equipamento_por_id.yml')
 def buscar_equipamento_por_idd(equip_id):
-    equipamento = obter_equipamento_por_id(equip_id)
-    if equipamento:
-        return jsonify(equipamento)
-    else:
-        return jsonify({'erro': 'Equipamento não encontrado'}), 404
+    try:
+        equipamento = obter_equipamento_por_id(equip_id)
+        if equipamento:
+            return jsonify(equipamento)
+        else:
+            return jsonify({'erro': 'Equipamento não encontrado'}), 404
+    except Exception as e:
+        return jsonify({'erro': f'Erro ao buscar equipamento: {str(e)}'}), 500
 
 @equipamentos_bp.route('/equipamentos/<int:equip_id>/status', methods=['PUT'])
+@swag_from('../../docs/equipamentos/atualizar_status.yml')
 def atualizar_status(equip_id):
-    data = request.get_json()
-    novo_status = data.get('status')
+    try:
+        data = request.get_json()
+        novo_status = data.get('status')
 
-    if not novo_status:
-        return jsonify({"erro": "Campo 'status' é obrigatório."}), 400
+        if not novo_status:
+            return jsonify({"erro": "Campo 'status' é obrigatório."}), 400
 
-    resultado = processar_atualizacao_status(equip_id, novo_status)
+        resultado = processar_atualizacao_status(equip_id, novo_status)
 
-    if resultado is None:
-        return jsonify({"erro": "Equipamento não encontrado."}), 404
+        if resultado is None:
+            return jsonify({"erro": "Equipamento não encontrado."}), 404
 
-    if "status_novo" not in resultado:
-        return jsonify(resultado), 200
+        if "erro" in resultado:
+            return jsonify(resultado), 500
 
-    return jsonify({
-        "mensagem": resultado["mensagem"],
-        "status_anterior": resultado["status_anterior"],
-        "novo_status": resultado["status_novo"]
-    }), 200
+        if "status_novo" not in resultado:
+            return jsonify(resultado), 200
 
+        return jsonify({
+            "mensagem": resultado["mensagem"],
+            "status_anterior": resultado["status_anterior"],
+            "novo_status": resultado["status_novo"]
+        }), 200
+
+    except Exception as e:
+        return jsonify({'erro': f'Erro ao atualizar status: {str(e)}'}), 500
