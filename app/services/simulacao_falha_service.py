@@ -9,22 +9,31 @@ def simular_falha_equipamento(equipamento_id):
     if not recursos:
         return {"erro": "Nenhum recurso encontrado para o equipamento."}
     
-    recursos_ids = [r["id"] for r in recursos]
-    print(recursos_ids)
-
-    recursos_selecionados = random.sample(recursos_ids, min(len(recursos_ids), random.randint(1, len(recursos_ids))))
+    recursos_selecionados = random.sample(
+        recursos, 
+        min(len(recursos), random.randint(1, len(recursos)))
+    )
 
     status_possiveis = ["Com Problema", "Indisponível"]
     logs = []
 
-    for recurso_id in recursos_selecionados:
+    for recurso in recursos_selecionados:
+        recurso_id = recurso["id"]
+        cliente_atual = recurso.get("cliente")  
+
         novo_status = random.choice(status_possiveis)
-        atualizar_status_recurso(recurso_id, novo_status)
+
+        # Atualiza o status preservando o cliente
+        atualizar_status_recurso(recurso_id, novo_status, cliente_atual)
 
         descricao = f"Simulação de falha: status alterado para {novo_status}."
         registrar_evento(equipamento_id, "Falha Simulada", descricao)
 
-        logs.append({"recurso_id": recurso_id, "status_simulado": novo_status})
+        logs.append({
+            "recurso_id": recurso_id,
+            "status_simulado": novo_status,
+            "cliente_preservado": cliente_atual
+        })
 
     return {
         "equipamento_id": equipamento_id,
