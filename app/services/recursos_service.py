@@ -5,6 +5,7 @@ from app.repositories.recursos_repository import (
     buscar_status_recurso,
 )
 from app.services.eventos_service import registrar_evento
+from app.utils.notificacoes import notificar_evento
 
 def obter_recursos_do_equipamento(equip_id):
     try:
@@ -27,6 +28,16 @@ def alocar_recurso(equipamento_id, tipo_recurso, cliente_associado=None):
         )
         registrar_evento(equipamento_id, 'Resource Allocated', descricao)
 
+        notificar_evento(
+            tipo="Alocação de Recurso",
+            mensagem=descricao,
+            dados={
+                "equipamento_id": equipamento_id,
+                "recurso_id": recurso_id,
+                "cliente": cliente_associado
+            }
+        )
+
         return recurso_id, None
     except Exception as e:
         raise RuntimeError(f"Erro ao alocar recurso: {e}")
@@ -45,6 +56,15 @@ def desalocar_recurso(recurso_id):
 
         atualizar_status_recurso(recurso_id, "Disponível")
         registrar_evento(equipamento_id, 'Resource Deallocated', f"Recurso {recurso_id} desalocado com sucesso.")
+
+        notificar_evento(
+            tipo="Desalocação de Recurso",
+            mensagem=f"Recurso {recurso_id} desalocado do equipamento {equipamento_id}.",
+            dados={
+                "equipamento_id": equipamento_id,
+                "recurso_id": recurso_id
+            }
+        )
 
         return {"mensagem": "Recurso desalocado com sucesso."}, 200
     except Exception as e:
