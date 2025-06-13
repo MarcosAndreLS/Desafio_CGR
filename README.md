@@ -27,20 +27,51 @@ Este projeto pode ser executado de duas formas:
 - Git instalado
 - [Opcional] Docker e Docker Compose (para execução em containers)
 
-### Método 1: Executando com Python
-
-#### 1. Clone o repositório:
+### 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/MarcosAndreLS/Desafio_CGR.git
+cd Desafio_CGR
 ```
 
-#### 2. Crie e ative um ambiente virtual
+### 2. Crie e ative um ambiente virtual
 
-**Windows (cmd ou PowerShell):**
+**Windows:**
 
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
+**Linux/macOS:**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Instale as dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Execute o projeto
+
+#### 4.1  Direto pelo python
+
+```bash
+python run.py
+```
+
+**A aplicação será iniciada localmente e estará acessível em http://localhost:5000**
+
+#### 4.2  Usando docker
+
+```bash
+docker-compose up --build
+```
+
+**A aplicação será exposta na porta definida no docker-compose.yml (por padrão, 5000).**
+
+
+
