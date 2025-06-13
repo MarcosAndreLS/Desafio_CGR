@@ -1,0 +1,72 @@
+tags:
+  - Equipamentos
+operationId: atualizar_Status_Equipamento
+summary: Atualiza o status de um equipamento
+description: Atualiza o status de um equipamento ('Online' para 'Offline'). Esta ação também gera um log de evento.
+parameters:
+  - name: equip_id
+    in: path
+    required: true
+    description: ID do equipamento a ser atualizado
+    schema:
+      type: integer
+  - in: body
+    name: body
+    required: true
+    description: Dados para atualização de status
+    schema:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: Em Manutenção
+
+responses:
+  200:
+    description: Status atualizado com sucesso
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            mensagem:
+              type: string
+              example: Status atualizado com sucesso.
+            status_anterior:
+              type: string
+              example: Ativo
+            novo_status:
+              type: string
+              example: Em Manutenção
+  400:
+    description: Requisição inválida (falta o campo 'status')
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            erro:
+              type: string
+              example: Campo 'status' é obrigatório.
+  404:
+    description: Equipamento não encontrado
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            erro:
+              type: string
+              example: Equipamento não encontrado.
+  500:
+    description: Erro interno do servidor
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            erro:
+              type: string
+              example: Erro ao atualizar status. detalhes do erro

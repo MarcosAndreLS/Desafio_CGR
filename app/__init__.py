@@ -1,10 +1,13 @@
 from flask import Flask
 import os
 from app.models.db import init_db
+from flasgger import Swagger
 
 def create_app():
     app = Flask(__name__)
     app.config['DB_PATH'] = os.path.join(os.getcwd(), 'database', 'db.sqlite3')
+
+    Swagger(app)
 
     from .routes.init import init_bp
     app.register_blueprint(init_bp)
@@ -17,6 +20,12 @@ def create_app():
 
     from .routes.eventos import eventos_bp
     app.register_blueprint(eventos_bp)
+
+    from .routes.logica_negocio import logica_negocio_bp
+    app.register_blueprint(logica_negocio_bp)
+
+    from .routes.simulacao_falha import simulacao_falha_bp
+    app.register_blueprint(simulacao_falha_bp)
 
     # Inicializa banco ao iniciar app
     schema_path = os.path.join(os.getcwd(), 'database', 'schema.sql')

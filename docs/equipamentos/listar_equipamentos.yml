@@ -1,0 +1,37 @@
+tags:
+  - Equipamentos
+summary: Lista todos os equipamentos
+operationId: listar_equipamentos
+description: Retorna todos os equipamentos de rede cadastrados.
+responses:
+  200:
+    description: Lista de equipamentos retornada com sucesso
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              nome:
+                type: string
+              tipo:
+                type: string
+              ip_gerenciamento:
+                type: string
+              status:
+                type: string
+              localizacao:
+                type: string
+  500:
+    description: Erro interno do servidor
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            erro:
+              type: string
+              example: Erro ao listar equipamentos. detalhes do erro
