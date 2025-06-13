@@ -82,3 +82,55 @@ docker-compose up --build
 
 **A aplicação será exposta na porta definida no docker-compose.yml (por padrão, 5000).**
 
+## 🏗️ Arquitetura Geral
+
+O sistema foi projetado seguindo os princípios de **separação de responsabilidades**, com uma arquitetura em camadas que facilita a manutenção, testes e escalabilidade.
+
+### 🔸 Camadas do Sistema
+
+[ API (Flask Routes) ]
+        │
+        ▼
+[ Services (Concentra o processamento dos dados) ]
+        │
+        ▼
+[ Repositories (Acesso a Dados - SQL) ]
+        │
+        ▼
+[ Models (Conexão com o Banco de Dados SQLite) ]
+
+### Estrutura de Diretórios
+
+DesafioCGR/
+├── app/
+│   ├── models/            # Conexão com o banco de dados (ex: db.py)
+│   ├── repositories/      # Consultas SQL puras e acesso aos dados
+│   ├── routes/            # Endpoints da API (Flask)
+│   ├── services/          # Concentra o processamento dos dados
+│   └── utils/             # Funções utilitárias (ex: notificar eventos)
+│
+├── database/              # Scripts SQL para criação e povoamento do banco
+│   ├── schema.sql
+│   ├── data.sql
+│   └── db.sqlite3
+│
+├── docs/
+│   └── equipamentos/      # Documentação Swagger para cada grupo de rotas
+│   └── recursos/
+│   └── eventos/
+│   └── logica_negocio/
+│   └── simulacao_falha/
+│
+├── test/                  # Testes unitários
+│   └── teste_logica/
+│   │    └── test_alocacao.py
+│   │    └── test_gargalos.py
+│   ├── test_equipamento.py
+│   └── test_logica_negocio.py
+│
+├── docker-compose.yml     # Orquestração de serviços com Docker
+├── Dockerfile             # Imagem da aplicação
+├── run.py                 # Ponto de entrada da aplicação Flask
+├── requirements.txt       # Dependências do projeto
+├── .gitignore
+└── README.md
