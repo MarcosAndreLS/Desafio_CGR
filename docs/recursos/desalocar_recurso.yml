@@ -1,7 +1,7 @@
 tags:
   - Recursos
 summary: Desalocar um recurso previamente alocado
-operationId: desalocarRecurso
+operationId: desalocar_Recurso
 description: Libera o recurso especificado, atualizando seu status para disponível e removendo a associação com cliente.
 parameters:
   - in: body
