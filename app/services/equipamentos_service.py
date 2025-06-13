@@ -5,6 +5,7 @@ from app.repositories.equipamentos_repository import (
     atualizar_status_equipamento_no_banco
 )
 from app.services.eventos_service import registrar_evento
+from app.utils.notificacoes import notificar_evento
 
 def obter_todos_equipamentos():
     return listar_todos_equipamentos()
@@ -37,6 +38,12 @@ def processar_atualizacao_status(equip_id, novo_status):
         atualizar_status_equipamento_no_banco(equip_id, novo_status)
         descricao = f"Status alterado de {status_atual} para {novo_status}."
         registrar_evento(equip_id, "Status Change", descricao)
+
+        if novo_status.lower() == "offline":
+            notificar_evento(
+                tipo="Equipamento Offline",
+                mensagem=f"Equipamento {equip_id} ficou offline.",
+            )
 
         return {
             "status_alterado": True,
