@@ -21,7 +21,7 @@ parameters:
       properties:
         status:
           type: string
-          example: Em Manutenção
+          example: Manutenção
 
 responses:
   200:
