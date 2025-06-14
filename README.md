@@ -160,7 +160,7 @@ GET /recursos/melhor?tipo_recurso=Porta Ethernet&equipamento_id=1
 
 A função `verificar_gargalos` verifica se um determinado equipamento está enfrentando problemas com base em eventos recentes de falha. Critério utilizado:
 
-- Se houver 3 ou mais eventos "Offline" nos últimos 10 minutos, o sistema considera o equipamento com problema.
+- Se houver 3 ou mais eventos "Offline" ou "Com problema" ou "Indisponível" nos últimos 10 minutos, o sistema considera o equipamento com problema.
 
 A rota associada é:
 
@@ -227,3 +227,25 @@ POST /equipamentos/<equipamento_id>/simular_falha
   },
   "mensagem": "Simulação de falha concluída com sucesso."
 ```
+
+### Como o Sistema Reage às Falhas Simuladas
+
+Após a simulação, os recursos afetados entram em estado indisponível para alocação. Isso impacta diretamente as seguintes funcionalidades:
+
+#### 1. Alocação Inteligente (/recursos/melhor)
+
+- A função obter_melhor_recurso ignora recursos que estão com status "Com Problema" ou "Indisponível".
+
+- Assim, mesmo que existam muitos recursos cadastrados, apenas os disponíveis e válidos são considerados para alocação.
+
+#### 2. Verificação de Gargalos (/equipamentos/<id>/verificar_gargalos)
+
+- A função verificar_gargalos analisa a frequência de eventos "Offline" ou falhas simuladas.
+
+- Se o número ultrapassar um limite (ex: 3 falhas em 10 minutos), o sistema sinaliza o equipamento como problemático.
+
+#### 3. Logs
+
+- Cada falha simulada gera um evento registrado no sistema.
+
+- Isso garante rastreabilidade, permitindo que seja visto quando, onde e o que falhou.
