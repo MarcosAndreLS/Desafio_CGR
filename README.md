@@ -176,7 +176,7 @@ GET /recursos/melhor?tipo_recurso=Porta Ethernet&equipamento_id=1
 
 A função `verificar_gargalos` verifica se um determinado equipamento está enfrentando problemas com base em eventos recentes de falha. Critério utilizado:
 
-- Se houver 3 ou mais eventos "Offline" ou "Com problema" ou "Indisponível" nos últimos 10 minutos, o sistema considera o equipamento com problema.
+- Analisa a descrição da tabela de evento. Se houver 3 ou mais eventos "Offline" ou "Com problema" ou "Indisponível" nos últimos 10 minutos, o sistema considera o equipamento com problema.
 
 A rota associada é:
 
@@ -204,13 +204,13 @@ POST /equipamentos/<equipamento_id>/simular_falha
 
 #### 3  Para cada recurso selecionado:
 
-#### 4  Altera seu status para "Com Problema" ou "Indisponível".
+-  Altera seu status para "Com Problema" ou "Indisponível".
 
-#### 5  Preserva o cliente associado (se houver).
+-  Preserva o cliente associado (se houver).
 
-#### 6  Registra um evento de falha simulada no sistema.
+-  Registra um evento de falha simulada no sistema.
 
-#### 7  Retorna um resumo dos recursos afetados pela simulação.
+-  Retorna um resumo dos recursos afetados pela simulação.
 
 ### Exemplo de resposta: 
 
