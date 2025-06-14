@@ -139,3 +139,91 @@ DesafioCGR/
 ├── .gitignore
 └── README.md
 ```
+
+## 🧠 Lógica de Negócio e Algoritmos
+
+A lógica de negócio do sistema foi desenhada para oferecer **inteligência na alocação de recursos** e **monitoramento ativo de possíveis gargalos e falhas** em equipamentos de rede. Abaixo estão as principais decisões de design adotadas:
+
+### 🔄 Alocação Inteligente de Recursos
+
+A função `obter_melhor_recurso` seleciona o melhor recurso disponível com base em critérios de priorização definidos pela aplicação. Atualmente, o critério adotado é:
+
+- Selecionar o recurso com **status 'Disponível'** que está há mais tempo nessa condição (`status_atualizado_em`), de forma a evitar alocações injustas ou repetitivas.
+
+A rota associada é:
+
+```http
+GET /recursos/melhor?tipo_recurso=Porta Ethernet&equipamento_id=1
+```
+
+### 🚨 Verificação de Gargalos e Falhas
+
+A função `verificar_gargalos` verifica se um determinado equipamento está enfrentando problemas com base em eventos recentes de falha. Critério utilizado:
+
+- Se houver 3 ou mais eventos "Offline" nos últimos 10 minutos, o sistema considera o equipamento com problema.
+
+A rota associada é:
+
+```http
+GET /equipamentos/<equipamento_id>/verificar_gargalos
+```
+
+## 💥 Simulação de Falhas e Detecção de Problemas
+
+Para testar a resiliência do sistema e a detecção de gargalos, foi implementado um mecanismo de **simulação de falhas controlada**, capaz de alterar o estado dos recursos de um equipamento aleatoriamente.
+
+### ⚙️ Como Funciona a Simulação de Falha
+
+Ao chamar o endpoint de simulação:
+
+```http
+POST /equipamentos/<equipamento_id>/simular_falha
+```
+
+### O sistema executa as seguintes ações:
+
+#### 1  Recupera todos os recursos associados ao equipamento especificado.
+
+#### 2  Seleciona aleatoriamente uma quantidade de recursos (de 1 até o total existente).
+
+#### 3  Para cada recurso selecionado:
+
+#### 4  Altera seu status para "Com Problema" ou "Indisponível".
+
+#### 5  Preserva o cliente associado (se houver).
+
+#### 6  Registra um evento de falha simulada no sistema.
+
+#### 7  Retorna um resumo dos recursos afetados pela simulação.
+
+### Exemplo de resposta: 
+
+```bash
+{
+  "dados": {
+    "equipamento_id": 3,
+    "recursos_afetados": [
+      {
+        "cliente_preservado": null,
+        "recurso_id": 12,
+        "status_simulado": "Indisponível"
+      },
+      {
+        "cliente_preservado": "Cliente A",
+        "recurso_id": 11,
+        "status_simulado": "Com Problema"
+      },
+      {
+        "cliente_preservado": null,
+        "recurso_id": 13,
+        "status_simulado": "Com Problema"
+      },
+      {
+        "cliente_preservado": "Cliente B",
+        "recurso_id": 14,
+        "status_simulado": "Com Problema"
+      }
+    ]
+  },
+  "mensagem": "Simulação de falha concluída com sucesso."
+```
