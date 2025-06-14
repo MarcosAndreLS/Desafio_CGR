@@ -8,7 +8,7 @@ def simular_falha_equipamento(equipamento_id):
 
     if not recursos:
         return {"erro": "Nenhum recurso encontrado para o equipamento."}
-    
+
     recursos_selecionados = random.sample(
         recursos, 
         min(len(recursos), random.randint(1, len(recursos)))

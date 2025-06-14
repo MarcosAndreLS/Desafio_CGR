@@ -27,7 +27,7 @@ def alocar_recurso(equipamento_id, tipo_recurso, cliente_associado=None):
             if cliente_associado else f"Recurso ID {recurso_id} alocado."
         )
         registrar_evento(equipamento_id, 'Resource Allocated', descricao)
-
+        
         notificar_evento(
             tipo="Alocação de Recurso",
             mensagem=descricao,
