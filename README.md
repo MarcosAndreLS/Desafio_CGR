@@ -88,6 +88,7 @@ O sistema foi projetado seguindo os princípios de **separação de responsabili
 
 ### 🔸 Camadas do Sistema
 
+```bash
 [ API (Flask Routes) ]
         │
         ▼
@@ -98,9 +99,12 @@ O sistema foi projetado seguindo os princípios de **separação de responsabili
         │
         ▼
 [ Models (Conexão com o Banco de Dados SQLite) ]
+```
 
 ### Estrutura de Diretórios
 
+
+```bash
 DesafioCGR/
 ├── app/
 │   ├── models/            # Conexão com o banco de dados (ex: db.py)
@@ -134,3 +138,4 @@ DesafioCGR/
 ├── requirements.txt       # Dependências do projeto
 ├── .gitignore
 └── README.md
+```
