@@ -140,6 +140,22 @@ DesafioCGR/
 └── README.md
 ```
 
+## Como Testar a API com Swagger
+
+A aplicação utiliza o Flasgger para fornecer uma interface Swagger interativa, todos os endpoints da API podem ser testados diretamente pelo navegador.
+
+### Acessando a Interface Swagger
+
+Após iniciar o projeto localmente (com python run.py ou docker-compose up), acesse no seu navegador:
+
+```bash
+    http://localhost:5000/apidocs
+```
+
+- Todos os endpoints estarão listados por grupo.
+- É possível enviar requisições diretamente da interface.
+- Os parâmetros esperados e descrições estarão disponíveis.
+
 ## 🧠 Lógica de Negócio e Algoritmos
 
 A lógica de negócio do sistema foi desenhada para oferecer **inteligência na alocação de recursos** e **monitoramento ativo de possíveis gargalos e falhas** em equipamentos de rede. Abaixo estão as principais decisões de design adotadas:
@@ -249,3 +265,28 @@ Após a simulação, os recursos afetados entram em estado indisponível para al
 - Cada falha simulada gera um evento registrado no sistema.
 
 - Isso garante rastreabilidade, permitindo que seja visto quando, onde e o que falhou.
+
+## Próximos Passos para Evoluir o Protótipo
+
+Para transformar este protótipo em um sistema robusto e pronto para produção, os seguintes passos são recomendados:
+
+### 1. Validação e Segurança
+
+- Adicionar autenticação e autorização (ex: JWT)
+
+### 2. Cobertura de Testes
+
+- Ampliar os testes unitários cobrindo todos os serviços e repositórios.
+- Incluir testes de performance e carga para pontos críticos.
+
+### 3. Persistência e Escalabilidade
+
+- Migrar de SQLite para um banco mais robusto (ex: PostgreSQL ou MySQL).
+
+### 4. Observabilidade e Logs
+
+- Implementar monitoramento com Prometheus + Grafana.
+
+### 5. Melhorias de Lógica
+
+- Agendar verificações periódicas e ações automáticas em caso de falhas.
