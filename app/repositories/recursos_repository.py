@@ -36,7 +36,7 @@ def atualizar_status_recurso(recurso_id, novo_status, cliente_associado=None):
         UPDATE recursos
         SET status_alocacao = ?,
             cliente_associado = ?,
-            status_atualizado_em = datetime('now')
+            status_atualizado_em = datetime('now', '-3 hours')
         WHERE id = ?
     """, (novo_status, cliente_associado, recurso_id))
     

@@ -19,7 +19,7 @@ def simular_falha_equipamento(equipamento_id):
 
     for recurso in recursos_selecionados:
         recurso_id = recurso["id"]
-        cliente_atual = recurso.get("cliente")  
+        cliente_atual = recurso.get("cliente_associado")  
 
         novo_status = random.choice(status_possiveis)
 
