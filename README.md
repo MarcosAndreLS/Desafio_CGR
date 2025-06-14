@@ -126,9 +126,6 @@ DesafioCGR/
 │   └── simulacao_falha/
 │
 ├── test/                  # Testes unitários
-│   └── teste_logica/
-│   │    └── test_alocacao.py
-│   │    └── test_gargalos.py
 │   ├── test_equipamento.py
 │   └── test_logica_negocio.py
 │
@@ -151,6 +148,9 @@ Após iniciar o projeto localmente (com python run.py ou docker-compose up), ace
 ```bash
     http://localhost:5000/apidocs
 ```
+
+![Swagger interface](docs/images/swagger1.png)
+![Swagger interface](docs/images/swagger2.png)
 
 - Todos os endpoints estarão listados por grupo.
 - É possível enviar requisições diretamente da interface.
