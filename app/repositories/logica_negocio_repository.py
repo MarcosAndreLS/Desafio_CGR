@@ -1,5 +1,7 @@
 from app.models.db import get_connection
 
+# Busca o melhor recurso disponível do tipo especificado, opcionalmente filtrando por equipamento
+# Retorna o recurso disponível há mais tempo (com base em 'status_atualizado_em')
 def buscar_melhor_recurso_disponivel(tipo_recurso, equipamento_id=None):
     conn = get_connection()
     cursor = conn.cursor()

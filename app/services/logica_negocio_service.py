@@ -22,7 +22,7 @@ def verificar_gargalos(equipamento_id, limite_eventos=3, intervalo_minutos=10):
             "problema_detectado": False,
             "mensagem": "Nenhum gargalo identificado."
         }
-    
+
 def obter_melhor_recurso(tipo_recurso, equipamento_id=None):
     recurso = buscar_melhor_recurso_disponivel(tipo_recurso, equipamento_id)
     if recurso:

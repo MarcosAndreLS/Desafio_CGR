@@ -18,12 +18,15 @@ parameters:
       properties:
         equipamento_id:
           type: integer
+          example: 1
           description: ID do equipamento para o qual o recurso será alocado
         tipo_recurso:
           type: string
+          example: Porta Ethernet
           description: Tipo do recurso a ser alocado
         cliente_associado:
           type: string
+          example: Cliente J
           description: Nome do cliente associado ao recurso (opcional)
           nullable: true
 

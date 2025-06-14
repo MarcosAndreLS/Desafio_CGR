@@ -70,7 +70,6 @@ class EquipamentosRoutesTestCase(unittest.TestCase):
 
     @patch('app.routes.equipamentos.processar_atualizacao_status')
     def test_atualizar_status_sem_status(self, mock_processar):
-        # Não precisa mockar porque a requisição é barrada antes de chamar
         response = self.client.put(
             '/equipamentos/1/status',
             data=json.dumps({}),  # sem 'status'

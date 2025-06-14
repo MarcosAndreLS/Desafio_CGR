@@ -126,9 +126,6 @@ DesafioCGR/
 │   └── simulacao_falha/
 │
 ├── test/                  # Testes unitários
-│   └── teste_logica/
-│   │    └── test_alocacao.py
-│   │    └── test_gargalos.py
 │   ├── test_equipamento.py
 │   └── test_logica_negocio.py
 │
@@ -151,6 +148,9 @@ Após iniciar o projeto localmente (com python run.py ou docker-compose up), ace
 ```bash
     http://localhost:5000/apidocs
 ```
+
+![Swagger interface](docs/images/swagger1.png)
+![Swagger interface](docs/images/swagger2.png)
 
 - Todos os endpoints estarão listados por grupo.
 - É possível enviar requisições diretamente da interface.
@@ -176,7 +176,7 @@ GET /recursos/melhor?tipo_recurso=Porta Ethernet&equipamento_id=1
 
 A função `verificar_gargalos` verifica se um determinado equipamento está enfrentando problemas com base em eventos recentes de falha. Critério utilizado:
 
-- Se houver 3 ou mais eventos "Offline" ou "Com problema" ou "Indisponível" nos últimos 10 minutos, o sistema considera o equipamento com problema.
+- Analisa a descrição da tabela de evento. Se houver 3 ou mais eventos "Offline" ou "Com problema" ou "Indisponível" nos últimos 10 minutos, o sistema considera o equipamento com problema.
 
 A rota associada é:
 
@@ -204,13 +204,13 @@ POST /equipamentos/<equipamento_id>/simular_falha
 
 #### 3  Para cada recurso selecionado:
 
-#### 4  Altera seu status para "Com Problema" ou "Indisponível".
+-  Altera seu status para "Com Problema" ou "Indisponível".
 
-#### 5  Preserva o cliente associado (se houver).
+-  Preserva o cliente associado (se houver).
 
-#### 6  Registra um evento de falha simulada no sistema.
+-  Registra um evento de falha simulada no sistema.
 
-#### 7  Retorna um resumo dos recursos afetados pela simulação.
+-  Retorna um resumo dos recursos afetados pela simulação.
 
 ### Exemplo de resposta: 
 
@@ -290,3 +290,7 @@ Para transformar este protótipo em um sistema robusto e pronto para produção,
 ### 5. Melhorias de Lógica
 
 - Agendar verificações periódicas e ações automáticas em caso de falhas.
+
+## Considerações Finais
+
+Ainda há bastante espaço para evoluir, mas já dá pra ter uma noção clara do funcionamento do sistema. Fico à disposição para qualquer dúvida ou sugestão, e agradeço desde já pela atenção na avaliação! Independente do resultado, já fico extremamente contento só pelo a aportunidade de ter participado desse desafio seletivo.

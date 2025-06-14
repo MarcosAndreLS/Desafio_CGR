@@ -2,7 +2,7 @@ tags:
   - Lógica de negócio
 summary: Obter melhor recurso disponível
 operationId: obter_Melhor_Recurso
-description: Retorna o recurso mais disponível e adequado com base no tipo do recurso e, opcionalmente, no equipamento.
+description: Retorna o recurso que está a mais disponível com base no tipo do recurso e, opcionalmente, no equipamento.
 parameters:
   - name: tipo_recurso
     in: query
