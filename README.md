@@ -290,3 +290,7 @@ Para transformar este protótipo em um sistema robusto e pronto para produção,
 ### 5. Melhorias de Lógica
 
 - Agendar verificações periódicas e ações automáticas em caso de falhas.
+
+## Considerações Finais
+
+Ainda há bastante espaço para evoluir, mas já dá pra ter uma noção clara do funcionamento do sistema. Fico à disposição para qualquer dúvida ou sugestão, e agradeço desde já pela atenção na avaliação! Independente do resultado, já fico extremamente contento só pelo a aportunidade de ter participado desse desafio seletivo.
