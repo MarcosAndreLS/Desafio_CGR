@@ -6,7 +6,7 @@ from app.services.logica_negocio_service import verificar_gargalos, obter_melhor
 
 class TestLogicaNegocioService(unittest.TestCase):
 
-    @patch('app.services.logica_negocio_service.contar_eventos_offline')
+    @patch('app.services.logica_negocio_service.contar_eventos_problema')
     def test_verificar_gargalos_com_problema(self, mock_contar):
         # Mock para simular que tem eventos suficientes para identificar problema
         mock_contar.return_value = 5
@@ -14,9 +14,10 @@ class TestLogicaNegocioService(unittest.TestCase):
         resultado = verificar_gargalos(equipamento_id=1, limite_eventos=3, intervalo_minutos=10)
 
         self.assertTrue(resultado['problema_detectado'])
-        self.assertIn("5 eventos de status 'Offline'", resultado['mensagem'])
+        self.assertEqual(resultado['mensagem'], "5 eventos de status crítico ('Offline', 'Com Problema' ou 'Indisponível') nos últimos 10 minutos.")
 
-    @patch('app.services.logica_negocio_service.contar_eventos_offline')
+
+    @patch('app.services.logica_negocio_service.contar_eventos_problema')
     def test_verificar_gargalos_sem_problema(self, mock_contar):
         # Mock para simular poucos eventos, sem problema
         mock_contar.return_value = 1

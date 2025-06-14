@@ -38,7 +38,7 @@ def buscar_recurso_disponivel(equipamento_id, tipo_recurso):
 def atualizar_status_recurso(recurso_id, novo_status, cliente_associado=None):
     conn = get_connection(current_app.config['DB_PATH'])
     cursor = conn.cursor()
-    
+
     cursor.execute("""
         UPDATE recursos
         SET status_alocacao = ?,
@@ -46,7 +46,7 @@ def atualizar_status_recurso(recurso_id, novo_status, cliente_associado=None):
             status_atualizado_em = datetime('now', '-3 hours')
         WHERE id = ?
     """, (novo_status, cliente_associado, recurso_id))
-    
+
     conn.commit()
     conn.close()
 

@@ -120,7 +120,7 @@ DesafioCGR/
 │
 ├── docs/
 │   └── equipamentos/      # Documentação Swagger para cada grupo de rotas
-│   └── recursos/
+│   └── recursos/          # Contém também um diagrama realacional de banco de dados
 │   └── eventos/
 │   └── logica_negocio/
 │   └── simulacao_falha/
@@ -156,6 +156,39 @@ Após iniciar o projeto localmente (com python run.py ou docker-compose up), ace
 - É possível enviar requisições diretamente da interface.
 - Os parâmetros esperados e descrições estarão disponíveis.
 
+## Como executar os testes unitários
+
+Certifique-se de estar com o ambiente virtual ativado e as dependências instaladas. A partir da raiz do projeto, execute:
+
+### 🧪 Testes da lógica de negócio (ex: alocação e gargalos)
+```bash
+python -m unittest tests.test_logica_negocio
+```
+
+Este arquivo testa funções da camada de serviço (service), especificamente:
+
+- verificar_gargalos: Detecta se um equipamento apresenta falhas frequentes em um curto período.
+
+- Seleciona o recurso mais adequado com base no tempo de disponibilidade em que ele se encontra.
+
+As funções do banco de dados foram simuladas com @patch
+
+### 🧪 Testes das rotas da API de equipamentos
+
+```bash
+python -m unittest tests.test_equipamentos
+```
+
+Este arquivo testa as rotas da API de equipamentos, incluindo:
+
+- GET /equipamentos
+
+- GET /equipamentos/<id>
+
+- PUT /equipamentos/<id>/status
+
+As funções do banco de dados foram simuladas com @patch
+
 ## 🧠 Lógica de Negócio e Algoritmos
 
 A lógica de negócio do sistema foi desenhada para oferecer **inteligência na alocação de recursos** e **monitoramento ativo de possíveis gargalos e falhas** em equipamentos de rede. Abaixo estão as principais decisões de design adotadas:
@@ -164,7 +197,7 @@ A lógica de negócio do sistema foi desenhada para oferecer **inteligência na 
 
 A função `obter_melhor_recurso` seleciona o melhor recurso disponível com base em critérios de priorização definidos pela aplicação. Atualmente, o critério adotado é:
 
-- Selecionar o recurso com **status 'Disponível'** que está há mais tempo nessa condição (`status_atualizado_em`), de forma a evitar alocações injustas ou repetitivas.
+- Selecionar o recurso com **status 'Disponível'** que está há mais tempo nessa condição (`status_atualizado_em`), de forma a evitar alocações injustas ou repetitivas. A coluna `status_atualizado_em` no banco de dados, guarda o último horário em que um recurso teve seu status atualizado.
 
 A rota associada é:
 
@@ -176,7 +209,7 @@ GET /recursos/melhor?tipo_recurso=Porta Ethernet&equipamento_id=1
 
 A função `verificar_gargalos` verifica se um determinado equipamento está enfrentando problemas com base em eventos recentes de falha. Critério utilizado:
 
-- Analisa a descrição da tabela de evento. Se houver 3 ou mais eventos "Offline" ou "Com problema" ou "Indisponível" nos últimos 10 minutos, o sistema considera o equipamento com problema.
+- Analisa a descrição da tabela de eventos. Se houver 3 ou mais eventos "Offline" ou "Com problema" ou "Indisponível" nos últimos 10 minutos relacionados a um mesmo equipamento, o sistema considera o equipamento com problema ou que está enfrentando algum gargalo.
 
 A rota associada é:
 
@@ -293,4 +326,4 @@ Para transformar este protótipo em um sistema robusto e pronto para produção,
 
 ## Considerações Finais
 
-Ainda há bastante espaço para evoluir, mas já dá pra ter uma noção clara do funcionamento do sistema. Fico à disposição para qualquer dúvida ou sugestão, e agradeço desde já pela atenção na avaliação! Independente do resultado, já fico extremamente contento só pelo a aportunidade de ter participado desse desafio seletivo.
+Ainda há bastante espaço para evoluir, mas já dá pra ter uma noção clara do funcionamento do sistema. Fico à disposição para qualquer dúvida ou sugestão, e agradeço desde já pela atenção na avaliação! Independente do resultado, já fico extremamente contente só pelo a aportunidade de ter participado desse desafio seletivo.

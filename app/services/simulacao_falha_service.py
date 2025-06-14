@@ -10,7 +10,7 @@ def simular_falha_equipamento(equipamento_id):
         return {"erro": "Nenhum recurso encontrado para o equipamento."}
 
     recursos_selecionados = random.sample(
-        recursos, 
+        recursos,
         min(len(recursos), random.randint(1, len(recursos)))
     )
 
@@ -19,7 +19,7 @@ def simular_falha_equipamento(equipamento_id):
 
     for recurso in recursos_selecionados:
         recurso_id = recurso["id"]
-        cliente_atual = recurso.get("cliente_associado")  
+        cliente_atual = recurso.get("cliente_associado")
 
         novo_status = random.choice(status_possiveis)
 

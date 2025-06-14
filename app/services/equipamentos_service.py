@@ -1,5 +1,5 @@
 from app.repositories.equipamentos_repository import (
-    listar_todos_equipamentos, 
+    listar_todos_equipamentos,
     buscar_equipamento_por_id,
     obter_status_equipamento,
     atualizar_status_equipamento_no_banco
