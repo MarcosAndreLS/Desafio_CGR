@@ -28,15 +28,19 @@ def buscar_melhor_recurso_disponivel(tipo_recurso, equipamento_id=None):
     conn.close()
     return recurso
 
-def contar_eventos_offline(equipamento_id, tempo_limite):
+def contar_eventos_problema(equipamento_id, tempo_limite):
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
         SELECT COUNT(*) FROM eventos
         WHERE equipamento_id = ?
-        AND tipo_evento = 'Status Change'
-        AND descricao LIKE '%para Offline%'
+        AND tipo_evento IN ('Status Change', 'Falha Simulada')
+        AND (
+            descricao LIKE '%para Offline%' OR
+            descricao LIKE '%para Com Problema%' OR
+            descricao LIKE '%para Indisponível%'
+        )
         AND timestamp >= ?
     """, (equipamento_id, tempo_limite))
 
